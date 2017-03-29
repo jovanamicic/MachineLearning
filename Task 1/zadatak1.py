@@ -1,17 +1,10 @@
+import sys
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-
-header = ['X','Y']
-data = pd.read_csv('ships.csv', names=header, header = 1)
-
-x = data['X']
-y = data['Y']
-#plt.plot(x,y,'*')
-#plt.show()
-
-# Standalone simple linear regression example
 from math import sqrt
+
+
 
 # Calculate root mean squared error
 def rmse_metric(actual, predicted):
@@ -63,21 +56,31 @@ def simple_linear_regression(train, test):
     predictions = list()
     b0, b1 = coefficients(train)
     for row in test:
-        yhat = b0  + b1 * row[0] + row[0]**2 
+        yhat = b0  + b1 * row[0] + row[0]**2 #parabola
         predictions.append(yhat)
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(x, predictions)
-    plt.plot(x,y,'*')
-    plt.show()
     return predictions
 
-# Test simple linear regression
-dataset = []
-for xi,yi in zip(x,y):
-    temp = [xi, yi]
-    dataset.append(temp) 
+def main(argv):
+	#Read file
+	fileName = argv[1]
+	header = ['X','Y']
+	data = pd.read_csv(fileName, names=header, header = 1)
 
-#dataset = [[1, 1], [2, 3], [4, 3], [3, 2], [5, 5]]
-rmse = evaluate_algorithm(dataset, simple_linear_regression)
-print('RMSE: %.3f' % (rmse))
+	x = data['X']
+	y = data['Y']
+	plt.plot(x,y,'*')
+	plt.show()
+
+	dataset = []
+	for xi,yi in zip(x,y):
+		dataset.append([xi,yi])
+		
+	rmse = evaluate_algorithm(dataset, simple_linear_regression)
+	print('RMSE: %.3f' % (rmse))
+
+if __name__ == "__main__":
+	main(sys.argv)        #python zadatak1.py "ships.csv"
+	
+
+
+
