@@ -45,6 +45,8 @@ def dataset_minmax(dataset):
     return minmax
 
 # Rescale dataset columns to the range 0-1
+# Mean normalizacija - skaliramo vrednost obelezja X tako da njegova srednja
+# vrednost bude bliska nuli
 def normalize_dataset(dataset, minmax):
     for row in dataset:
         for i in range(len(row)):
@@ -61,13 +63,15 @@ def rmse_metric(actual, predicted):
     return sqrt(mean_error)
 
 # Evaluate an algorithm using a cross validation split
-#   do predict mozemo sve obrsati
 def evaluate_algorithm(dataset, *args):
     lenght = int(len(dataset) * 0.8)
     train_set = dataset[:lenght]
     test_set = dataset[lenght:]
     predicted = linear_regression_sgd(train_set, test_set, *args)
+    x = [row[0] for row in test_set]
+    plt.plot(x, predicted, "x")
     actual = [row[-1] for row in test_set]
+    plt.plot(x, actual, "*")
     rmse = rmse_metric(actual, predicted)
     return rmse
 
@@ -79,6 +83,7 @@ def predict(row, coefficients):
     return yhat
 
 # Estimate linear regression coefficients using stochastic gradient descent
+# coef je lista od dva obelezja (x,y) koji se inicijalizuju na 0
 def coefficients_sgd(train, l_rate, n_epoch):
     coef = [0.0 for i in range(len(train[0]))]
     for epoch in range(n_epoch):
@@ -87,8 +92,8 @@ def coefficients_sgd(train, l_rate, n_epoch):
             error = yhat - row[-1]
             coef[0] = coef[0] - l_rate * error
             for i in range(len(row)-1):
-                coef[i + 1] = coef[i + 1] - l_rate * error * row[i]
-            # print(l_rate, n_epoch, error)
+                coef[i + 1] = coef[i] - l_rate * error * row[i]
+        #print(l_rate, n_epoch, error)
     return coef
 
 # Linear Regression Algorithm With Stochastic Gradient Descent
@@ -123,6 +128,7 @@ n_epoch = 50
 score = evaluate_algorithm(dataset, l_rate, n_epoch)
 
 plt.plot(x, y, 'o')
+
 
 print('Mean RMSE: %.3f' % score)
 
