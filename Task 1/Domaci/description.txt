@@ -1,15 +1,41 @@
-Tim KMJ
-- Mina Medić SW25/2013
-- Katarina Preradov SW31/2013
-- Jovana Mićić SW33/2013
+Tim KMJ:
+Mina Medić SW25/2013
+Katarina Preradov SW31/2013
+Jovana Mićić SW33/2013
 
-Zadatak 1 - Jednostruka linearna regresija
+Zadatak 1 
 
-Prilikom izrade domaćeg zadataka korišćen je Python verzije 3.5.2. Od dodatnih biblioteka,
+Prilikom izrade domaćeg zadataka korišćen je Python verzije 3.5.2. Od dodatnih biblioteka
 korišćene su matplotlib za crtanje grafika i pandas za učitavanje CSV datoteke.
 
-Zadatak smo rešile upotrebom jednostruke linearne regresije. Na samom početku, nakon učitavanja podataka,
-delile smo podatke na dva skupa: trening skup i validacioni. Trening skup nam je predstavljao 80% podataka,
+Kada smo podatke prvi put učitale i vizualizovale, primetile smo da ima tri outlayer-a. Njih smo ručno izbacile iz dataset-a. 
+Na samom početku, nakon učitavanja podataka, delile smo podatke na dva skupa: trening skup i validacioni. Trening skup nam sadrži 80% podataka,
 a validacioni skup 20%. Na trening skupu smo "učile" koeficijente i na kraju na validacionom skupu smo
-isprobale model koji smo dobile. Za procenu koeficijenata smo koristile stohastic gradient descent.
-Za evaluaciju modela koristile smo RMSE grešku.
+isprobale model koji smo dobile. Model nam je polinom, a za procenu koeficijenata smo koristile stohastic gradient descent.
+Za evaluaciju modela koristile smo RMSE grešku. 
+
+Prilikom izrade zadatka smo isprobabavale razne kombinacije za vrednosti stepena polinoma, korak učenja i broj iteracija.
+U nastavku sledi tabela sa rezultatima koje smo dobile:
+
+
+Stepen	Korak_učenja	Broj_iteracija	RMSE_Trening	RMSE_Validacija	
+
+   3		0.1				1000		3.93738900707	4.31285089383
+   3		0.01			1000		6.79120879342	7.19678962899
+   3		0.1				10000		3.95118757243	4.30452541001
+   3		0.01			10000		3.76292659973	4.16849287777
+   
+   4		0.1				1000		3.7557058354	4.12989901107
+   4		0.01			1000		6.53129588		6.93613646853
+   4		0.1				10000		3.352983629		3.74321838535
+   4		0.01			10000		3.55654392971   3.96264189684
+   
+   5		0.1				1000		3.67864175809	4.05433256327
+   5		0.01			1000		6.45272121391	6.85697728771
+   5		0.1				10000		3.1548105794 	3.56158616648
+   5		0.01			10000		3.47502380838	3.88334968402
+
+
+
+
+

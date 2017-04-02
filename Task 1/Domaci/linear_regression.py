@@ -18,13 +18,13 @@ def split_dataset(x, y, percent):
 '''
 def calculate_rmse(actual, predicted):
 
-    sum_error = 0.0
+    error_sum = 0.0
+    n = len(actual)
 
-    for i in range(len(actual)):
-        prediction_error = predicted[i] - actual[i]
-        sum_error += prediction_error ** 2
+    for i in range(n):
+        error_sum += (predicted[i] - actual[i]) ** 2
 
-    return (sum_error / len(actual)) ** 0.5
+    return (error_sum / n) ** 0.5
 
 
 '''
@@ -53,7 +53,6 @@ def estimate_coefficients(train, alpha=0.1, max_iters=1000, deg=1, epsilon=0.000
     for iteration in range(max_iters):
 
         if iteration > 0 and abs(iter_error - prev_error) < epsilon:
-            print('ep')
             break
 
         prev_error = iter_error
