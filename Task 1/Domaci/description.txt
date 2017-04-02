@@ -1,0 +1,15 @@
+Tim KMJ
+- Mina Medić SW25/2013
+- Katarina Preradov SW31/2013
+- Jovana Mićić SW33/2013
+
+Zadatak 1 - Jednostruka linearna regresija
+
+Prilikom izrade domaćeg zadataka korišćen je Python verzije 3.5.2. Od dodatnih biblioteka,
+korišćene su matplotlib za crtanje grafika i pandas za učitavanje CSV datoteke.
+
+Zadatak smo rešile upotrebom jednostruke linearne regresije. Na samom početku, nakon učitavanja podataka,
+delile smo podatke na dva skupa: trening skup i validacioni. Trening skup nam je predstavljao 80% podataka,
+a validacioni skup 20%. Na trening skupu smo "učile" koeficijente i na kraju na validacionom skupu smo
+isprobale model koji smo dobile. Za procenu koeficijenata smo koristile stohastic gradient descent.
+Za evaluaciju modela koristile smo RMSE grešku.
