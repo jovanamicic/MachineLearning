@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import sys
 from linear_regression import *
 import matplotlib.pyplot as plt
 import pandas as pd
+
 
 if __name__ == '__main__':
 
@@ -19,7 +22,7 @@ if __name__ == '__main__':
     x_train, y_train, x_validate, y_validate = split_dataset(x, y, 0.8)
 
     deg = 5  # polynom degree
-    lеаrning_rate = 0.1  # learning rate
+    rate = 0.1  # learning rate
     max_iters = 10000
 
     # TRAINING SET
@@ -28,7 +31,7 @@ if __name__ == '__main__':
     for xi, yi in zip(x_train, y_train):
         dataset_train.append([xi, yi])
 
-    coefs = estimate_coefficients(dataset_train, lеаrning_rate, max_iters, deg)
+    coefs = estimate_coefficients(dataset_train, rate, max_iters, deg)
 
     predicted_y = calculate_predictions(dataset_train, coefs, deg)
 

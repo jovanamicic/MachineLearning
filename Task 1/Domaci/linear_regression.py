@@ -35,7 +35,7 @@ def predict(row, coefficients, deg):
     for i in range(deg):
         tmp_pow = i + 1
         prediction += coefficients[tmp_pow] * (row[0] ** tmp_pow)  # ... + cn * x^n ...  cn is nth coefficient
-
+    
     return prediction
 
 
