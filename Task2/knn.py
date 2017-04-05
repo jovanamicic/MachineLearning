@@ -4,10 +4,12 @@ import math
 import operator
 import pandas as pd
 from sklearn.metrics import mean_squared_error
+from sklearn.neighbors import KNeighborsRegressor
 
                     
 def loadDataset(trainFileName, testFileName):
     dataTrain = pd.read_csv(trainFileName, header=0)
+    trainSetY = dataTrain['Grade'].values.tolist()
     
     dataTrain['sex'] = dataTrain['sex'].map({'F': 0, 'M': 1})
     dataTrain['address'] = dataTrain['address'].map({'U': 0, 'R': 1})
@@ -24,7 +26,7 @@ def loadDataset(trainFileName, testFileName):
     dataTrain['romantic'] = dataTrain['romantic'].map({'yes': 0, 'no': 1})
     
     trainingSet = dataTrain.values.tolist()
-    
+    trainSetFeatures = dataTrain.drop('Grade', axis=1).values.tolist()
                 
         
     dataTest = pd.read_csv(testFileName, header=0)
@@ -45,8 +47,9 @@ def loadDataset(trainFileName, testFileName):
     dataTest['romantic'] = dataTest['romantic'].map({'yes': 0, 'no': 1})
     
     testSet = dataTest.values.tolist()
+    testSetFeatures = dataTest.drop('Grade', axis=1).values.tolist()
     
-    return trainingSet, testSet, testSetY
+    return trainingSet, testSet, trainSetY, testSetY, trainSetFeatures, testSetFeatures
     
                 
 
@@ -89,19 +92,10 @@ def getAccuracy(testSet, predictions):
 def get_rmse(y, y_pred):
     return mean_squared_error(y, y_pred) ** 0.5
 
-def calculate_rmse(actual, predicted):
-
-    error_sum = 0.0
-    n = len(actual)
-
-    for i in range(n):
-        error_sum += (predicted[i] - actual[i]) ** 2
-
-    return (error_sum / n) ** 0.5
     
 def main():
     # prepare data
-    trainingSet, testSet, testSetY = loadDataset('train.csv', 'test.csv')
+    trainingSet, testSet, trainSetY, testSetY, trainSetFeatures, testSetFeatures = loadDataset('train.csv', 'test.csv')
     print 'Train set: ' + repr(len(trainingSet))
     print 'Test set: ' + repr(len(testSet))
     print
@@ -115,10 +109,17 @@ def main():
         predictions.append(result)
         print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
     
-    rmse = calculate_rmse(testSetY, predictions)
+    rmse = get_rmse(testSetY, predictions)
     print 'RMSE: ', rmse
     
     accuracy = getAccuracy(testSet, predictions)
     print('Accuracy: ' + repr(accuracy) + '%')
+    
+    
+    print
+    model = KNeighborsRegressor(n_neighbors=5, metric='manhattan')
+    model.fit(trainSetFeatures, trainSetY)
+    new_values = model.predict(testSetFeatures)
+    print 'RMSE with sklearn: ' , get_rmse(testSetY, new_values)
     
 main()
