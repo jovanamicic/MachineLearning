@@ -1,0 +1,29 @@
+Prema ugradjenoj funkciji 11 obelezja daje najbolje rezultate. To znaci da treba izbaciti 16 obelezja. Nisam uspela skontati 2 koja uticu. 
+
+Ne uticu, treba ih izbaciti:
+	- age 
+	- Fedu
+	- reason
+	- traveltime
+	- famsup
+	- famrel
+	- freetime 
+	- goout 
+	- Walc
+	- Medu 
+	- health
+	- absences
+	- guardian
+	
+Utice:
+	- Dalc
+	- romantic
+	- internet
+	- higher
+	- activities
+	- paid
+	- schoolsup
+	- failures
+	- studytime
+	
+

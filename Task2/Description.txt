@@ -1,0 +1,5 @@
+Lasso nam omogučava selekciju obeležja.
+Za optimizaciju lasso funkcije greške ne možemo koristiti
+standardandan gradient descent (jer funkcija apsolutne vrednosti
+nije diferencijabilna u svim tačkama) → naučili smo coordinate descent algoritam.
+
