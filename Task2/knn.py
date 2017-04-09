@@ -67,7 +67,7 @@ def load_dataset(trainFileName, testFileName):
     dataTest  = dataTest.astype(float)
     
     #drop unnecessary attributess from dataset
-    dataTest = dataTest.drop(['age', 'Fedu', 'reason', 'traveltime', 'famsup', 'famrel', 'freetime', 'goout', 'Walc', 'Medu', 'health', 'absences', 'guardian'], axis = 1)
+    #dataTest = dataTest.drop(['age', 'Fedu', 'reason', 'traveltime', 'famsup', 'famrel', 'freetime', 'goout', 'Walc', 'Medu', 'health', 'absences', 'guardian'], axis = 1)
     testSet = dataTest.values.tolist()
     
     #list with only X attributes from test dataset
@@ -120,13 +120,16 @@ def load_dataset2(trainFileName, testFileName):
 '''
     Function that calculates Euclidian distance between any two given instances.
 '''
-def euclidean_distance(testInstance, trainingInstance, length):
+def euclidean_distance(testInstance, trainingInstance):
     return math.sqrt(sum(pow(a-b,2) for a, b in zip(testInstance, trainingInstance)))
 
 
-    
-def manhattan_distance(testInstance, trainingInstance, length):
+'''
+    Function that calculates Manhattan distance between any two given instances.
+'''    
+def manhattan_distance(testInstance, trainingInstance):
     return sum(abs(a-b) for a,b in zip(testInstance,trainingInstance))
+  
     
     
 '''
@@ -136,12 +139,11 @@ def manhattan_distance(testInstance, trainingInstance, length):
     Funkciji se prosledjuje ceo trening set i samo jedna instaca testa,
     koja se poredi sa svakom instancom trening seta kako bi joj se naslo K najsliznijih tacaka
 '''
-def get_neighbors(trainingSet, testInstance, k):
+def find_k_neighbors(trainingSet, testInstance, k):
     distances = []
-    length = len(testInstance)-1
     for x in range(len(trainingSet)):
-        #dist = manhattan_distance(testInstance, trainingSet[x], length)
-        dist = euclidean_distance(testInstance, trainingSet[x], length)
+        dist = manhattan_distance(testInstance, trainingSet[x])
+        #dist = euclidean_distance(testInstance, trainingSet[x])
         distances.append((trainingSet[x], dist))
     distances.sort(key=operator.itemgetter(1))
     neighbors = []
@@ -151,17 +153,19 @@ def get_neighbors(trainingSet, testInstance, k):
     return neighbors
 
 '''
-    After we find k nearest neighbors, we need to find a class
+    After we find k nearest neighbors, we need to find a class(grade) for our point.
+    Every neighbour vote for his grade.
+    Grade with most votes is the grade of our point.
 '''
 def predict_grade(neighbors):
-    classVotes = {}
+    votes = {}
     for x in range(len(neighbors)):
-        response = neighbors[x][-1]
-        if response in classVotes:
-            classVotes[response] += 1
+        grade = neighbors[x][-1]
+        if grade in votes:
+            votes[grade] += 1
         else:
-            classVotes[response] = 1
-    sortedVotes = sorted(classVotes.iteritems(), key=operator.itemgetter(1), reverse=True)
+            votes[grade] = 1
+    sortedVotes = sorted(votes.iteritems(), key=operator.itemgetter(1), reverse=True)
     return sortedVotes[0][0]
 
 
