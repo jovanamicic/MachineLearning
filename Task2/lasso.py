@@ -35,11 +35,12 @@ def main():
 
 	# Set a minimum threshold of 0.25
 	sfm = SelectFromModel(clf, threshold=0.25)
-	sfm.fit(X, y)
+	sfm.fit(X, y) 
 	n_features = sfm.transform(X).shape[1]
-	print("AAAA", n_features)
-	print(X[100])
+	#print("AAAA", n_features)
+	print sfm.coef_      
+	#print(X[100])
 
-	print(sfm.transform(X)[100])
+	#print(sfm.transform(X)[100])
 
 main()

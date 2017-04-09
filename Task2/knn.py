@@ -1,14 +1,8 @@
-# Example of kNN implemented from Scratch in Python
-
 import math
 import operator
 import pandas as pd
-import numpy as np
 from sklearn.metrics import mean_squared_error
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn import preprocessing
 from copy import deepcopy
-from sklearn.metrics.pairwise import euclidean_distances
 
 '''
     Function that reads data from train and test dataset.
@@ -41,7 +35,7 @@ def load_dataset(trainFileName, testFileName):
     dataTrain  = dataTrain.astype(float)
     
     #drop unnecessary attributess from dataset
-    dataTrain = dataTrain.drop(['age', 'Fedu', 'reason', 'traveltime', 'famsup', 'famrel', 'freetime', 'goout', 'Walc', 'Medu', 'health', 'absences', 'guardian'], axis = 1)
+    #dataTrain = dataTrain.drop(['age', 'Fedu', 'reason', 'traveltime', 'famsup', 'famrel', 'freetime', 'goout', 'Walc', 'Medu', 'health', 'absences', 'guardian'], axis = 1)
     trainingSet = dataTrain.values.tolist()
     
     #list with only X attributes from train dataset
@@ -84,42 +78,44 @@ def load_dataset(trainFileName, testFileName):
 
   
     
-#def load_dataset(trainFileName, testFileName):
-#    dataTrain = pd.read_csv(trainFileName, header=0)
-#    trainSetGrades = dataTrain['Grade'].values.tolist()[:400]
-#    
-#    dataTrain['sex'] = dataTrain['sex'].map({'F': 0, 'M': 1})
-#    dataTrain['address'] = dataTrain['address'].map({'U': 0, 'R': 1})
-#    dataTrain['famsize'] = dataTrain['famsize'].map({'LE3': 0, 'GT3': 1})
-#    dataTrain['Pstatus'] = dataTrain['Pstatus'].map({'T': 0, 'A': 1})
-#    dataTrain['reason'] = dataTrain['reason'].map({'home': 0, 'reputation': 1, 'course' : 2, 'other' : 3})
-#    dataTrain['guardian'] = dataTrain['guardian'].map({'mother': 0, 'father': 1, 'other' : 2})
-#    dataTrain['schoolsup'] = dataTrain['schoolsup'].map({'yes': 0, 'no': 1})
-#    dataTrain['famsup'] = dataTrain['famsup'].map({'yes': 0, 'no': 1})
-#    dataTrain['paid'] = dataTrain['paid'].map({'yes': 0, 'no': 1})
-#    dataTrain['activities'] = dataTrain['activities'].map({'yes': 0, 'no': 1})
-#    dataTrain['higher'] = dataTrain['higher'].map({'yes': 0, 'no': 1})
-#    dataTrain['internet'] = dataTrain['internet'].map({'yes': 0, 'no': 1})
-#    dataTrain['romantic'] = dataTrain['romantic'].map({'yes': 0, 'no': 1})
-#    
-#    dataTrain  = dataTrain.astype(float)
-#    dataTrain = dataTrain.drop(['age', 'Fedu', 'reason', 'traveltime', 'famsup', 'famrel', 'freetime', 'goout', 'Walc', 'Medu', 'health', 'absences', 'guardian'], axis = 1)
-#    
-#    dataTrainCopy = deepcopy(dataTrain)
-#    
-#    trainingSet = dataTrain.values.tolist()[:400]
-#    trainSetFeatures = dataTrain.drop('Grade', axis=1).values.tolist()[:400]
-#        
-#    
-#    
-#    #dataTest = pd.read_csv(testFileName, header=0)
-#    testSetGrades = dataTrainCopy['Grade'].values.tolist()[400:]
-#    
-#    testSet = dataTrainCopy.values.tolist()[400:]
-#    testSetFeatures = dataTrainCopy.drop('Grade', axis=1).values.tolist()[400:]
-#    
-#    
-#    return trainingSet, testSet, trainSetGrades, testSetGrades, trainSetFeatures, testSetFeatures
+def load_dataset2(trainFileName, testFileName):
+    dataTrain = pd.read_csv(trainFileName, header=0)
+    trainSetGrades = dataTrain['Grade'].values.tolist()[:400]
+    
+    dataTrain['sex'] = dataTrain['sex'].map({'F': 0, 'M': 1})
+    dataTrain['address'] = dataTrain['address'].map({'U': 0, 'R': 1})
+    dataTrain['famsize'] = dataTrain['famsize'].map({'LE3': 0, 'GT3': 1})
+    dataTrain['Pstatus'] = dataTrain['Pstatus'].map({'T': 0, 'A': 1})
+    dataTrain['reason'] = dataTrain['reason'].map({'home': 0, 'reputation': 1, 'course' : 2, 'other' : 3})
+    dataTrain['guardian'] = dataTrain['guardian'].map({'mother': 0, 'father': 1, 'other' : 2})
+    dataTrain['schoolsup'] = dataTrain['schoolsup'].map({'yes': 0, 'no': 1})
+    dataTrain['famsup'] = dataTrain['famsup'].map({'yes': 0, 'no': 1})
+    dataTrain['paid'] = dataTrain['paid'].map({'yes': 0, 'no': 1})
+    dataTrain['activities'] = dataTrain['activities'].map({'yes': 0, 'no': 1})
+    dataTrain['higher'] = dataTrain['higher'].map({'yes': 0, 'no': 1})
+    dataTrain['internet'] = dataTrain['internet'].map({'yes': 0, 'no': 1})
+    dataTrain['romantic'] = dataTrain['romantic'].map({'yes': 0, 'no': 1})
+    
+    dataTrain  = dataTrain.astype(float)
+    #dataTrain = dataTrain.drop(['age', 'Fedu', 'reason', 'traveltime', 'famsup', 'famrel', 'freetime', 'goout', 'Walc', 'Medu', 'health', 'absences', 'guardian'], axis = 1)
+    
+    
+    
+    dataTrainCopy = deepcopy(dataTrain)
+    
+    trainingSet = dataTrain.values.tolist()[:400]
+    trainSetFeatures = dataTrain.drop('Grade', axis=1).values.tolist()[:400]
+        
+    
+    
+    #dataTest = pd.read_csv(testFileName, header=0)
+    testSetGrades = dataTrainCopy['Grade'].values.tolist()[400:]
+    
+    testSet = dataTrainCopy.values.tolist()[400:]
+    testSetFeatures = dataTrainCopy.drop('Grade', axis=1).values.tolist()[400:]
+    
+    
+    return trainingSet, testSet, trainSetGrades, testSetGrades, trainSetFeatures, testSetFeatures
                 
 '''
     Function that calculates Euclidian distance between any two given instances.
@@ -157,7 +153,7 @@ def get_neighbors(trainingSet, testInstance, k):
 '''
     After we find k nearest neighbors, we need to find a class
 '''
-def get_response(neighbors):
+def predict_grade(neighbors):
     classVotes = {}
     for x in range(len(neighbors)):
         response = neighbors[x][-1]
@@ -168,57 +164,8 @@ def get_response(neighbors):
     sortedVotes = sorted(classVotes.iteritems(), key=operator.itemgetter(1), reverse=True)
     return sortedVotes[0][0]
 
-def get_accuracy(testSet, predictions):
-    correct = 0
-    for x in range(len(testSet)):
-        if testSet[x][-1] == predictions[x]:
-            correct += 1
-    return (correct/float(len(testSet))) * 100.0
 
 def get_rmse(y, y_pred):
     return mean_squared_error(y, y_pred) ** 0.5
 
     
-def main():
-    # prepare data
-    trainingSet, testSet, trainSetGrades, testSetGrades, trainSetFeatures, testSetFeatures = load_dataset('train.csv', 'test.csv')
-    print 'Train set: ' + repr(len(trainingSet))
-    print 'Test set: ' + repr(len(testSet))
-    print
-    
-#    meanTrainingSet = np.mean(trainingSet)
-#    stdTrainingSet = np.std(trainingSet)
-#    
-#    meanTestSet = np.mean(testSet)
-#    stdTestSet = np.std(testSet)
-#    
-#    meanTestGradeSet = np.mean(testSetGrades)
-#    stdTestGradeSet = np.std(testSetGrades)
-#    
-#    trainingSetNor = (trainingSet - meanTrainingSet) / stdTrainingSet
-#    testSetNor = (testSet - meanTestSet) / stdTestSet
-
-    # generate predictions
-    predictions=[]
-    k = 7
-    for x in range(len(testSet)):
-        neighbors = get_neighbors(trainingSet, testSet[x], k)
-        result = get_response(neighbors)
-        predictions.append(result)
-        print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
-
-#    for x in range(len(testSet)):
-#        neighbors = get_neighbors(trainingSetNor, testSetNor[x], k)
-#        result = get_response(neighbors)
-#        predictions.append(result)
-#        print('> predicted=' + repr(result) + ', actual=' + repr(testSetNor[x][-1]))
-   
-    
-    rmse = get_rmse(testSetGrades, predictions)
-    print 'RMSE: ', rmse
-    
-    accuracy = get_accuracy(testSet, predictions)
-    print('Accuracy: ' + repr(accuracy) + '%')
-    
-    
-main()
