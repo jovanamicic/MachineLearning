@@ -1,0 +1,2 @@
+- koristili smo pandas da uzmemo podatke
+- imali smo missing values oznacene upitnikom koje smo prebacili u NaN a onda pozvali pandas fju koja izbacuje redove koji imaju NaN vrednosti
