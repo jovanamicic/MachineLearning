@@ -19,11 +19,8 @@ if __name__ == '__main__':
         filename_train = sys.argv[1]
         filename_test = sys.argv[2]
 
-    trainingSet, testSet = load_dataset(filename_train, filename_test)
-    # prepare model
-    summaries = summarizeByClass(trainingSet)
-	# test model
-    predictions = getPredictions(summaries, testSet)
-    print(predictions)
-    accuracy = getAccuracy(testSet, predictions)
+    training_set, test_set, training_set_mean_std = load_dataset(filename_train, filename_test)
+    
+    predictions = getPredictions(training_set_mean_std, test_set)
+    accuracy = calculate_accuracy(test_set, predictions)
     print('Accuracy: {0}%').format(accuracy)

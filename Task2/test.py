@@ -1,6 +1,6 @@
 import sys
 
-from knn import load_dataset, find_k_neighbors, predict_grade, get_rmse
+from knn import load_dataset2, find_k_neighbors, predict_grade, get_rmse
 
 
 if __name__ == '__main__':
@@ -21,15 +21,15 @@ if __name__ == '__main__':
         filename_test = sys.argv[2]
 
 
-    trainingSet, testSet, trainSetGrades, testSetGrades, trainSetFeatures, testSetFeatures = load_dataset(filename_train, filename_test)
+    trainingSet, testSet, trainSetGrades, testSetGrades, trainSetFeatures, testSetFeatures = load_dataset2(filename_train, filename_test)
     
     predictions=[]
-    k = 7
+    k = 3
     for x in range(len(testSet)):
         neighbors = find_k_neighbors(trainingSet, testSet[x], k)
         predicted = predict_grade(neighbors)
         predictions.append(predicted)
-        print'> predicted=' + str(predicted) + ', actual=' + str(testSetGrades[x])
+        #print'> predicted=' + str(predicted) + ', actual=' + str(testSetGrades[x])
 
     rmse = get_rmse(testSetGrades, predictions)
     print 'RMSE:', str(rmse)

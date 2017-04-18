@@ -142,8 +142,8 @@ def manhattan_distance(testInstance, trainingInstance):
 def find_k_neighbors(trainingSet, testInstance, k):
     distances = []
     for x in range(len(trainingSet)):
-        dist = manhattan_distance(testInstance, trainingSet[x])
-        #dist = euclidean_distance(testInstance, trainingSet[x])
+        #dist = manhattan_distance(testInstance, trainingSet[x])
+        dist = euclidean_distance(testInstance, trainingSet[x])
         distances.append((trainingSet[x], dist))
     distances.sort(key=operator.itemgetter(1))
     neighbors = []

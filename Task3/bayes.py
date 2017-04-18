@@ -1,61 +1,72 @@
 import pandas as pd
 import numpy as np
-import random
 import math
+from sklearn.metrics import accuracy_score
 
+
+'''
+    Function that load test and training set from CSV files.
+    All columns with missing values are deleted.
+    Function also returns train data set with calculate mean and std for every attribute.
+'''
 def load_dataset(filename_train, filename_test):
     #Train set
     dataTrain = pd.read_csv(filename_train, header=0)
     dataTrain = dataTrain.replace('?', np.nan)
     dataTrain = dataTrain.dropna()
     dataTrain  = dataTrain.astype(float)
-    trainingSet = dataTrain.values.tolist()
+    training_set = dataTrain.values.tolist()
+    
+    training_set_mean_std = {0.0 : [], 1.0 : []}
+
+    df_zeros = dataTrain.loc[dataTrain['contraceptive'] == 0]
+    df_ones = dataTrain.loc[dataTrain['contraceptive'] == 1]
+
+    for column in df_zeros.columns.values:
+        if column != 'contraceptive':
+            training_set_mean_std[0.0].append(tuple((df_zeros[column].mean(), df_zeros[column].std())))
+        
+    for column in df_ones.columns.values:
+        if column != 'contraceptive':
+            training_set_mean_std[1.0].append(tuple((df_ones[column].mean(), df_ones[column].std())))
+    
+    print training_set_mean_std
 
     #Test set
-    
     dataTest = pd.read_csv(filename_test, header=0)
-    dataTest[:] = dataTest.replace('?', np.nan)
+    dataTest = dataTest.replace('?', np.nan)
     dataTest = dataTest.dropna()
     dataTest  = dataTest.astype(float)
-    testSet = dataTest.values.tolist()
+    test_set = dataTest.values.tolist()
+    
+    return training_set, test_set, training_set_mean_std
+ 
+#def separateByClass(dataset):
+#	separated = {}
+#	for i in range(len(dataset)):
+#		vector = dataset[i]
+#		if (vector[-1] not in separated):
+#			separated[vector[-1]] = []
+#		separated[vector[-1]].append(vector)
+#	return separated
+#
+#def mean(numbers):
+#     return np.mean(numbers)
+#
+#def stdev(numbers):
+#     return np.std(numbers)
+#
+#def summarize(dataset):
+#      summaries = [(mean(attribute), stdev(attribute)) for attribute in (dataset)]
+#      del summaries[-1]
+#      return summaries
 
-    return trainingSet, testSet
-
-"""
-Function that separate rows in map with keys 0 and 1.
-"""
-def separateByClass(dataset):
-	separated = {}
-	for i in range(len(dataset)):
-		vector = dataset[i]
-		if (vector[-1] not in separated):
-			separated[vector[-1]] = []
-		separated[vector[-1]].append(vector)
-	return separated
-
-def mean(numbers):
-	return sum(numbers)/float(len(numbers))
-
-def stdev(numbers):
-	avg = mean(numbers)
-	variance = sum([pow(x-avg,2) for x in numbers])/float(len(numbers)-1)
-	return math.sqrt(variance)
-
-def summarize(dataset):
-	summaries = [(mean(attribute), stdev(attribute)) for attribute in zip(*dataset)]
-	del summaries[-1]
-	return summaries
-
-"""
-For every column calculate mean and std and put it in dictionary with keys 0 and 1.
-"""
-def summarizeByClass(dataset):
-    separated = separateByClass(dataset)
-    summaries = {}
-    for classValue, instances in separated.iteritems():
-        summaries[classValue] = summarize(instances)
-    print(summaries)
-    return summaries
+#def summarizeByClass(dataset, class_zero, class_one):
+#    #separated = separateByClass(dataset)
+#    summaries = {}
+#    for classValue, instances in separated.iteritems():
+#        summaries[classValue] = summarize(instances)
+#    return summaries
 
 def calculateProbability(x, mean, stdev):
 	exponent = math.exp(-(math.pow(x-mean,2)/(2*math.pow(stdev,2))))
@@ -87,10 +98,9 @@ def getPredictions(summaries, testSet):
 		predictions.append(result)
 	return predictions
 
-def getAccuracy(testSet, predictions):
-    correct = 0
-    for i in range(len(testSet)):
-        if testSet[i][-1] == predictions[i]:
-            print("true")
-            correct += 1
-    return (correct/float(len(testSet))) * 100.0
+def calculate_accuracy(test_set, predictions):
+    true_values = []
+    for y in test_set:
+        true_values.append(y[-1])
+        
+    return accuracy_score(true_values, predictions) * 100

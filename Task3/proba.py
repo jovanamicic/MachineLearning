@@ -3,6 +3,8 @@
 import csv
 import random
 import math
+from sklearn import preprocessing
+import numpy as np
 
 def loadCsv(filename):
 	lines = csv.reader(open(filename, "rb"))
@@ -30,17 +32,15 @@ def separateByClass(dataset):
 	return separated
 
 def mean(numbers):
-	return sum(numbers)/float(len(numbers))
+     return np.mean(numbers)
 
 def stdev(numbers):
-	avg = mean(numbers)
-	variance = sum([pow(x-avg,2) for x in numbers])/float(len(numbers)-1)
-	return math.sqrt(variance)
+     return np.std(numbers)
 
 def summarize(dataset):
-	summaries = [(mean(attribute), stdev(attribute)) for attribute in zip(*dataset)]
-	del summaries[-1]
-	return summaries
+      summaries = [(mean(attribute), stdev(attribute)) for attribute in zip(*dataset)]
+      del summaries[-1]
+      return summaries
 
 def summarizeByClass(dataset):
     separated = separateByClass(dataset)
@@ -88,16 +88,16 @@ def getAccuracy(testSet, predictions):
 
 def main():
     filename = 'pima-indians-diabetes.data.csv'
-    splitRatio = 0.67
+    splitRatio = 0.95
     dataset = loadCsv(filename)
     trainingSet, testSet = splitDataset(dataset, splitRatio)
-    print('Split {0} rows into train={1} and test={2} rows').format(len(dataset), len(trainingSet), len(testSet))
+    print "aaaaaa"
+    print len(testSet)
     # prepare model
     summaries = summarizeByClass(trainingSet)
+    print summaries
     # test model
     predictions = getPredictions(summaries, testSet)
-    print(testSet)
-    print(predictions)
     accuracy = getAccuracy(testSet, predictions)
     print('Accuracy: {0}%').format(accuracy)
 
