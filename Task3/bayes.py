@@ -37,9 +37,10 @@ def load_dataset(filename_train, filename_test):
     dataTest = dataTest.replace('?', np.nan)
     dataTest = dataTest.dropna()
     dataTest  = dataTest.astype(float)
+    actual_values = dataTest['contraceptive'].tolist()
     test_set = dataTest.values.tolist()
     
-    return training_set, test_set, training_set_mean_std
+    return training_set, test_set, actual_values, training_set_mean_std
  
 #def separateByClass(dataset):
 #	separated = {}
@@ -72,9 +73,6 @@ def calculateProbability(x, mean, stdev):
 	exponent = math.exp(-(math.pow(x-mean,2)/(2*math.pow(stdev,2))))
 	return (1 / (math.sqrt(2*math.pi) * stdev)) * exponent
 
-'''
-Funkcija prima isti onaj recnik i samo jedan red iz test seta.
-''''	
 def calculateClassProbabilities(summaries, inputVector):
 	probabilities = {}
 	for classValue, classSummaries in summaries.iteritems():
@@ -85,9 +83,6 @@ def calculateClassProbabilities(summaries, inputVector):
 			probabilities[classValue] *= calculateProbability(x, mean, stdev)
 	return probabilities
 
-'''
-Funkcija prima isti onaj recnik i samo jedan red iz test seta.
-''''			
 def predict(summaries, inputVector):
 	probabilities = calculateClassProbabilities(summaries, inputVector)
 	bestLabel, bestProb = None, -1
@@ -98,12 +93,12 @@ def predict(summaries, inputVector):
 	return bestLabel
 
  
- '''
+'''
  Funkciji se prosledjuje test set i recnik ciji su kljuceci 0 i 1
  tj koristi ili ne koristi kontracepciju, a vrednosti su lista tuple-ova
  gde je prva vrednost u tuple-u mean, a druga std za svaki atribut.
  Ovo mozemo isto promeniti ako necemo da budu recnici.
- '''
+'''
 def getPredictions(summaries, testSet):
 	predictions = []
 	for i in range(len(testSet)):
@@ -111,9 +106,3 @@ def getPredictions(summaries, testSet):
 		predictions.append(result)
 	return predictions
 
-def calculate_accuracy(test_set, predictions):
-    true_values = []
-    for y in test_set:
-        true_values.append(y[-1])
-        
-    return accuracy_score(true_values, predictions) * 100
