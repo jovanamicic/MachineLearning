@@ -72,6 +72,9 @@ def calculateProbability(x, mean, stdev):
 	exponent = math.exp(-(math.pow(x-mean,2)/(2*math.pow(stdev,2))))
 	return (1 / (math.sqrt(2*math.pi) * stdev)) * exponent
 
+'''
+Funkcija prima isti onaj recnik i samo jedan red iz test seta.
+''''	
 def calculateClassProbabilities(summaries, inputVector):
 	probabilities = {}
 	for classValue, classSummaries in summaries.iteritems():
@@ -81,7 +84,10 @@ def calculateClassProbabilities(summaries, inputVector):
 			x = inputVector[i]
 			probabilities[classValue] *= calculateProbability(x, mean, stdev)
 	return probabilities
-			
+
+'''
+Funkcija prima isti onaj recnik i samo jedan red iz test seta.
+''''			
 def predict(summaries, inputVector):
 	probabilities = calculateClassProbabilities(summaries, inputVector)
 	bestLabel, bestProb = None, -1
@@ -91,6 +97,13 @@ def predict(summaries, inputVector):
 			bestLabel = classValue
 	return bestLabel
 
+ 
+ '''
+ Funkciji se prosledjuje test set i recnik ciji su kljuceci 0 i 1
+ tj koristi ili ne koristi kontracepciju, a vrednosti su lista tuple-ova
+ gde je prva vrednost u tuple-u mean, a druga std za svaki atribut.
+ Ovo mozemo isto promeniti ako necemo da budu recnici.
+ '''
 def getPredictions(summaries, testSet):
 	predictions = []
 	for i in range(len(testSet)):
