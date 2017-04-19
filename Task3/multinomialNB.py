@@ -45,6 +45,7 @@ def load_dataset(filename_train, filename_test):
 
     return train_x, train_y, test_set, actual_values
 
+    
 class MultinomialNB(object):
     def __init__(self, alpha=1.0):
         self.alpha = alpha  #smoothing param
