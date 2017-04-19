@@ -1,7 +1,7 @@
+import math
+
 import pandas as pd
 import numpy as np
-import math
-from sklearn.metrics import accuracy_score
 
 
 '''
@@ -55,37 +55,12 @@ def load_dataset(filename_train, filename_test):
     test_set = dataTest.values.tolist()
 
     return training_set, test_set, actual_values, training_set_mean_std
- 
-#def separateByClass(dataset):
-#	separated = {}
-#	for i in range(len(dataset)):
-#		vector = dataset[i]
-#		if (vector[-1] not in separated):
-#			separated[vector[-1]] = []
-#		separated[vector[-1]].append(vector)
-#	return separated
-#
-#def mean(numbers):
-#     return np.mean(numbers)
-#
-#def stdev(numbers):
-#     return np.std(numbers)
-#
-#def summarize(dataset):
-#      summaries = [(mean(attribute), stdev(attribute)) for attribute in (dataset)]
-#      del summaries[-1]
-#      return summaries
 
-#def summarizeByClass(dataset, class_zero, class_one):
-#    #separated = separateByClass(dataset)
-#    summaries = {}
-#    for classValue, instances in separated.iteritems():
-#        summaries[classValue] = summarize(instances)
-#    return summaries
 
 def calculateProbability(x, mean, stdev):
     exponent = math.exp(-(math.pow(x-mean,2)/(2*math.pow(stdev,2))))
     return (1 / (math.sqrt(2*math.pi) * stdev)) * exponent
+
 
 def calculateClassProbabilities(summaries, inputVector):
     probabilities = {}
@@ -96,6 +71,7 @@ def calculateClassProbabilities(summaries, inputVector):
             x = inputVector[i]
             probabilities[classValue] *= calculateProbability(x, mean, stdev)
     return probabilities
+
 
 def predict(summaries, inputVector):
     probabilities = calculateClassProbabilities(summaries, inputVector)
