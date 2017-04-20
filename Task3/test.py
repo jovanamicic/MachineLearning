@@ -8,8 +8,8 @@ from multinomialNB import *
 if __name__ == '__main__':
     # run: python test.py
     if len(sys.argv) == 1: 
-        filename_train = 'data/train2.csv'
-        filename_test = 'data/test2.csv'
+        filename_train = 'drzave.csv'
+        filename_test = 'drzaveTest.csv'
        
     # run: python test.py filename_test
     elif len(sys.argv) == 2:

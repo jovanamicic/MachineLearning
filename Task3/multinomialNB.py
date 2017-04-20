@@ -23,7 +23,7 @@ def load_dataset(filename_train, filename_test):
     #? zameni sa mean te kolone
     #dataTrain = dataTrain.apply(lambda x: x.fillna(x.mean()), axis=0)
 
-    train_y = dataTrain['contraceptive'].tolist()
+    train_y = dataTrain['isChina'].tolist()
     train_x = dataTrain.values.tolist()
 
 
@@ -40,7 +40,7 @@ def load_dataset(filename_train, filename_test):
     #zameni sa mean te kolone
     #dataTest = dataTest.apply(lambda x: x.fillna(x.mean()), axis=0)
 
-    actual_values = dataTest['contraceptive'].tolist()
+    actual_values = dataTest['isChina'].tolist()
     test_set = dataTest.values.tolist()
 
     return train_x, train_y, test_set, actual_values
@@ -58,12 +58,16 @@ class MultinomialNB(object):
         #calculate prior log probability for each class
         count_sample = X.shape[0]
 
-
-        self.class_log_prior_ = [np.log(1.0 * len(i) / count_sample) for i in separated]
+        self.class_log_prior_ = [(1.0 * len(i) / count_sample) for i in separated]
+        print self.class_log_prior_
 
         count = np.array([np.array(i).sum(axis=0) for i in separated]) + self.alpha
+        print
+        print count.tolist()
+        print
 
-        self.feature_log_prob_ = np.log(count / count.sum(axis=1)[np.newaxis].T)
+        self.feature_log_prob_ = (count / count.sum(axis=1)[np.newaxis].T)
+        print self.feature_log_prob_
 
         return self
 
