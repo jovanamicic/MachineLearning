@@ -1,2 +1,29 @@
-- koristili smo pandas da uzmemo podatke
-- imali smo missing values oznacene upitnikom koje smo prebacili u NaN a onda pozvali pandas fju koja izbacuje redove koji imaju NaN vrednosti
+Tim KMJ:
+Mina Medić SW25/2013
+Katarina Preradov SW31/2013
+Jovana Mićić SW33/2013
+
+Zadatak 3
+
+Prilikom izrade domaćeg zadataka korišćen je Python verzije 2.7.12. Od dodatnih biblioteka
+korišćene su sklearn.metrics za računanje tačnosti i pandas za učitavanje CSV datoteke.
+
+Primetile smo da dataset sadrži missing values označene upitnikom koje smo prebacile u NaN. Zatim smo problem sa nedostajućim vrednostima
+probale da rešimo na dva načina. Prvi način je bio da izbaicmo redove koji su imali NaN vrednost. Ovo smo mogle da uradimo bez velikih posledica
+zato što u celom dataset-u je bilo samo 9 redova sa nedostajućim vrednostima. Drugi način koji smo probale jeste da nedostajuće vrednosti
+zamenimo sa prosekom kolone u kojoj se nalazi. Imale smo istu tačnost na oba načina, ali smo se odlučile da ostavimo prvi.
+
+Za rešavanje problema smo isprobale dva algoritma: Multinomial Naive Bayes i Gaussian Naive Bayes sa Laplace Smoothing-om. 
+GaussianNB smo koristile samo da bi uporedile rezultate, iz razloga što se taj algoritam koristi kada imamo kontinualna obeležja, 
+a mi smo dobili podatke koji imaju diskretna obeležja.
+
+Kada smo implementirale MultinomialNB, prvo smo izračunale sve potrebne verovatnoće. Kada smo prebrojavale broj atributa neke klase,
+dodavale smo smoothing parametar alfa iz razloga da ne bi imali verovatnoće 0 ako se neki atribut ne pojavljuje u nekoj instanci
+trening/test skupa. Verovatnoće smo logaritmovali da bi izbegli jako male brojeve. Za svaku instancu se računa verovatnoća da pripada
+svakoj od klasa, a odluku kojoj će klasi pripadati smo implementirale da bude klasa sa najvećom verovatnoćom.
+
+Za validaciju rešenja, ceo dataset smo ručno delile na dva dela: trening skup (80%) i validacioni skup (20%).
+Za validacioni skup smo dobile tačnost od 68.1415929204% (Multinomial NB) i 62.8318584071% (Gaussian NB)
+Za deo test skupa koji nam je dat smo dobile tačnost 71.4285714286% (Multinomial NB) i 85.7142857143% (Gaussian NB),
+sa tim da su nam u trening skupu bili svi podaci iz dataset-a.
+
