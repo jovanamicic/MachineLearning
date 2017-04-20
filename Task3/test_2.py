@@ -31,7 +31,8 @@ if __name__ == '__main__':
     # read dataset for multinomial/bernouli NB
     training_dict, test_set, actual_values = load_dataset(filename_train, filename_test)
 
-    class_log_prob, feature_log_prob = fit(training_dict)
+    #class_log_prob, feature_log_prob = fit(training_dict)
+    fit(training_dict)
     #predictions = predict(test_set, class_log_prob, feature_log_prob)
 
     #accuracy = accuracy_score(actual_values, predictions) * 100

@@ -32,7 +32,7 @@ def load_dataset(filename_train, filename_test):
 
     for row in  range(len(df_ones.values.tolist())):
         training_dict[1.0].append(df_ones.values.tolist()[row])
-        
+
 
     # ------------------------ TEST SET ---------------------------
     dataTest = pd.read_csv(filename_test, header=0)
@@ -48,76 +48,64 @@ def load_dataset(filename_train, filename_test):
 
     return training_dict, test_set, actual_values
 
-#def fit(training_dict, alpha = 1.0):
-#
-#    #D is number of instances in training set
-#    D = len(training_dict[0.0]) + len(training_dict[1.0])
-#        
-#    class_log_prob = []
-#    for key in training_dict.keys():
-#        class_log_prob.append(np.log(1.0 * len(training_dict[key]) / D))
-#                                 
-#    #we need to count each values for each class and add self.alpha as smooting
-#    count = np.array([np.array(training_dict[key]).sum(axis=0) for key in training_dict]) + alpha
-#
-#    feature_log_prob = np.log(count / count.sum(axis=1)[np.newaxis].T)
-#
-#    return class_log_prob, feature_log_prob
-#
-#def predict(X, class_log_prob, feature_log_prob):
-#    pred = [(feature_log_prob * x).sum(axis = 1) + class_log_prob for x in X]
-#    return np.argmax(pred, axis = 1)
 
 def fit(training_dict, alpha = 1.0):
 
     #ukupan broj instanci u dataset-u
     N = float(len(training_dict[0.0]) + len(training_dict[1.0]))
-    
+
     #broj instanci po klasi
     Nc = [len(training_dict[key]) for key in training_dict]
-       
-    prior_c = [float(c/N) for c in Nc]
-       
+
+    #prior_c = [float(c/N) for c in Nc]
+
+    #verovatnoca za svaku klasu -> broj u toj klasi / ukupan broj
+    class_probabilities_ = [1.0 * c / N for c in Nc]
+
     #brojimo koliko se puta koji atribut (rec) pojavio u kojoj klasi
     count = []
     for key in training_dict:
         count.append([sum(x) for x in zip(*training_dict[key])])
-        
+
     #dodajemo smooting parametar na svaku vrednsost
-    count_smoot = []
+    count_smooth = []
     for i in count:
-        count_smoot.append(map(lambda x : x + alpha, i))
-    
+        count_smooth.append(map(lambda x : x + alpha, i))
+
+    #suma frekvencija svih reči u svim dokumentima koje pripadaju klasi c
+    sum_Nc = []
+    for c in count_smooth:
+        sum_Nc.append(sum(c))
+
     #calculate the log probability of each word Tct
     #suma frekvencija reci (atributa) d svih instanci koji pridapaju klasi c
-    
-    
 
-            
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

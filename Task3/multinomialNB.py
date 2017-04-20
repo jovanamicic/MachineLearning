@@ -60,6 +60,7 @@ class MultinomialNB(object):
 
 
         self.class_log_prior_ = [np.log(1.0 * len(i) / count_sample) for i in separated]
+
         count = np.array([np.array(i).sum(axis=0) for i in separated]) + self.alpha
 
         self.feature_log_prob_ = np.log(count / count.sum(axis=1)[np.newaxis].T)
