@@ -27,7 +27,9 @@ def load_dataset(filename_train, filename_test):
     # zameni nedostajuce sa mean te kolone
     # dataTrain = dataTrain.apply(lambda x: x.fillna(x.mean()), axis=0)
     
-    training_set = dataTrain.values.tolist()
+    training_set_y = dataTrain['class'].tolist()
+    dataTrain = dataTrain.drop('class', 1)
+    training_set_x = dataTrain.values.tolist()
 
 
     # ------------------------ TEST SET ---------------------------
@@ -44,4 +46,4 @@ def load_dataset(filename_train, filename_test):
 
     actual_values = dataTest['class'].tolist()
     test_set = dataTest.drop('class', 1).values.tolist()
-    return training_set, test_set, actual_values
+    return training_set_x, training_set_y, test_set, actual_values

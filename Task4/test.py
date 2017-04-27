@@ -2,6 +2,7 @@
 
 import sys
 from sklearn.metrics import f1_score
+from sklearn.svm import SVC
 
 from SVM import load_dataset
 
@@ -22,7 +23,20 @@ if __name__ == '__main__':
         filename_train = sys.argv[1]
         filename_test = sys.argv[2]
 
-    training_set, test_set, actual_values = load_dataset(filename_train, filename_test)
+    training_set_x, training_set_y, test_set, actual_values = load_dataset(filename_train, filename_test)
+    
+    clf = SVC()
+    clf.fit(training_set_x, training_set_y) 
+    SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+    decision_function_shape=None, degree=3, gamma='auto', kernel='rbf',
+    max_iter=-1, probability=False, random_state=None, shrinking=True,
+    tol=0.001, verbose=False)
+    
+    predicted = clf.predict(test_set)
+    print(predicted)
+    
+    f1_score = f1_score(actual_values, predicted, average='micro')
+    print('F1 micro score: {0} %').format(f1_score)
 
 #    class_probabilities, feature_probabilities = fit(training_dict)
 #    predictions = predict(test_set, class_probabilities, feature_probabilities)
