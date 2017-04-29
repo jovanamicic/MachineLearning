@@ -10,8 +10,8 @@ from SVM import load_dataset
 if __name__ == '__main__':
     # run: python test.py
     if len(sys.argv) == 1: 
-        filename_train = 'train.csv'
-        filename_test = 'test.csv'
+        filename_train = 'train2.csv'
+        filename_test = 'test2.csv'
        
     # run: python test.py filename_test
     elif len(sys.argv) == 2:
@@ -33,7 +33,6 @@ if __name__ == '__main__':
     tol=0.001, verbose=False)
     
     predicted = clf.predict(test_set)
-    print(predicted)
     
     f1_score = f1_score(actual_values, predicted, average='micro')
     print('F1 micro score: {0} %').format(f1_score)
