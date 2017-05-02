@@ -29,7 +29,8 @@ def main():
 	dataTrain = np.array(dataTrain)
 	X = dataTrain
 	
-
+	print(X[0])
+	print(y[0])
 	# We use the base estimator LassoCV since the L1 norm promotes sparsity of features.
 	clf = LassoCV()
 
@@ -37,10 +38,10 @@ def main():
 	sfm = SelectFromModel(clf, threshold=0.25)
 	sfm.fit(X, y) 
 	n_features = sfm.transform(X).shape[1]
-	#print("AAAA", n_features)
-	print sfm.coef_      
+	print("AAAA", n_features)
+	#print sfm.coef_      
 	#print(X[100])
 
-	#print(sfm.transform(X)[100])
+	print(sfm.transform(X)[100])
 
 main()

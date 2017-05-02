@@ -28,11 +28,12 @@ def load_dataset(filename_train, filename_test):
     dataTrain = dataTrain.apply(lambda x: x.fillna(x.mean()), axis=0)
     
     # izbaci irelevantne vrenosti
+	#izbaciti: adhesion,epithelial,chromatin,mitoses
+	
     dataTrain = dataTrain.drop('adhesion',1)
-    dataTrain = dataTrain.drop('clump',1)
-    dataTrain = dataTrain.drop('shape',1)
     dataTrain = dataTrain.drop('epithelial',1)
-    dataTrain = dataTrain.drop('chromatin',1)
+    dataTrain = dataTrain.drop('clump',1)
+    dataTrain = dataTrain.drop('mitoses',1)
     
     training_set_y = dataTrain['class'].tolist()
     dataTrain = dataTrain.drop('class', 1)
@@ -53,10 +54,9 @@ def load_dataset(filename_train, filename_test):
     
     # izbaci irelevantne vrenosti
     dataTest = dataTest.drop('adhesion',1)
-    dataTest = dataTest.drop('clump',1)
-    dataTest = dataTest.drop('shape',1)
     dataTest = dataTest.drop('epithelial',1)
-    dataTest = dataTest.drop('chromatin',1)
+    dataTest = dataTest.drop('clump',1)
+    dataTest = dataTest.drop('mitoses',1)
 
     actual_values = dataTest['class'].tolist()
     test_set = dataTest.drop('class', 1).values.tolist()
