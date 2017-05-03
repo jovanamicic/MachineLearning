@@ -1,0 +1,39 @@
+Tim KMJ:
+Mina Medić SW25/2013
+Katarina Preradov SW31/2013
+Jovana Mićić SW33/2013
+
+Zadatak 4
+
+Prilikom izrade domaćeg zadataka korišćen je Python verzije 2.7.12. Od dodatnih biblioteka
+korišćene su sklearn za računanje tačnosti i pandas za učitavanje CSV datoteke.
+
+Primetile smo da dataset sadrži missing values označene upitnikom koje smo prebacile u NaN. Zatim smo problem sa nedostajućim vrednostima
+probale da rešimo na dva načina. Prvi način je bio da izbaicmo redove koji su imali NaN vrednost. Drugi način koji smo probale jeste da nedostajuće vrednosti
+zamenimo sa prosekom kolone u kojoj se nalazi. Pošto smo imale vecu tacnost koristeci drugi nacin, njega smo i ostavile.
+
+Pre primene algoritma radile smo predprocesiranje podataka, odnosno primenile smo izbacivanje irelevantnih obelezja koristeci ugradjenu funkciju L1 based feature selection.
+To nam je omogucilo izbacivanje sledecih obelezja: adhesion, shape, epithelial, chromatin, cime smo smanjile dimenzionalnost problema.
+Predprocesiranje smo radile kako na trening, tako i nad test podacima.
+
+Kao sto znamo algoritam SVM se kombinuje sa vise vrsta kernela. Za rešavanje problema smo isprobale tri kernela: linearni, RBF (Gausov kernel) i polinomijalni. 
+Prilikom plotovanja nekih obelezja primetile smo da linearni i RBF kernel daju slicne rezultate, medjutim u vecini slucajeva RBF kernel je radio bolje.
+Za RBF kernel smo se takodje odlucile iz razloga sto on pokazuje najbolje rezultate za malo D (5 obelezja) i N srednje velicine (531).
+
+Za utvrdjivanje najoptiminajlinih parametara (c i gamma) propustile smo algoritam sa vise kombinacija parametara. Svi rezultati su cuvani u recniku, gde je kljuc bila vrednost f1_scora,
+a vrednosti su bile tuple-ovi c i gamma za dati score. Ispostavilo se da vise razlicitih kombinacija parametara daju iste rezultate f1 score-a.
+
+
+Za validaciju rešenja, ceo dataset smo ručno delile na dva dela: trening skup (80%) i validacioni skup (20%).
+Za validacioni skup smo dobile f1 score od 0.990740740741% 
+
+BEST c: 1, gamma : 0.01, score : 0.990740740741 %
+BEST c: 10, gamma : 0.001, score : 0.990740740741 %
+BEST c: 100, gamma : 0.0001, score : 0.990740740741 %
+BEST c: 1000, gamma : 0.0001, score : 0.990740740741 %
+
+Za deo test skupa koji nam je dat smo dobile tačnost 1.0%, sa tim da su nam u trening skupu bili svi podaci iz dataset-a.
+
+A kada smo za validaciju resenje trening skup prvo izmesale (shuffle funckija), a zatim delile na dva dela u osnosu 80:20, dobije smo razlicita resenja,
+gde se f1_score kretao od 0.943925233645 do 1, cime smo dosli do zakljucka da ucenje samog algoritma zavisi u velikoj meri od skupa podataka nad kojima se obucava.
+
