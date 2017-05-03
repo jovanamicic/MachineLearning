@@ -9,72 +9,65 @@ import numpy as np
 from sklearn.svm import LinearSVC
 from sklearn import svm
 
-from SVM import load_dataset
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.model_selection import GridSearchCV
+
+from SVM import *
 
 
 if __name__ == '__main__':
-	# run: python test.py
-	if len(sys.argv) == 1: 
-		filename_train = 'train2.csv'
-		filename_test = 'test2.csv'
-	   
-	# run: python test.py filename_test
-	elif len(sys.argv) == 2:
-		filename_train = 'train.csv'
-		filename_test = sys.argv[1]
+    # run: python test.py
+    if len(sys.argv) == 1: 
+        filename_train = 'train.csv'
+        filename_test = 'test.csv'
+       
+    # run: python test.py filename_test
+    elif len(sys.argv) == 2:
+        filename_train = 'train.csv'
+        filename_test = sys.argv[1]
 
-	# run: python test.py filename_train filename_test
-	else:
-		filename_train = sys.argv[1]
-		filename_test = sys.argv[2]
+    # run: python test.py filename_train filename_test
+    else:
+        filename_train = sys.argv[1]
+        filename_test = sys.argv[2]
 
-	training_set_x, training_set_y, test_set, actual_values = load_dataset(filename_train, filename_test)
-	
-	X = np.array(training_set_x).astype(int)
-	y = training_set_y
-	plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.coolwarm)
-	plt.show()
+    training_set_x, training_set_y, test_set, actual_values = load_dataset2(filename_train, filename_test)
+    
+    
+    list_of_c = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    list_of_gammas = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    prediction_validations = []
 
-	"""
-	#L1-based feature selection
-	#http://scikit-learn.org/stable/modules/feature_selection.html
-	X = np.array(training_set_x).astype(int)
-	y = np.array(training_set_y).astype(int)
-	lsvc = LinearSVC(C=0.01, penalty="l1", dual=False).fit(X, y)
-	model = SelectFromModel(lsvc, prefit=True)
-	X_new = model.transform(X)
-	print(X[0])
-	print(X_new[0])
-	#treba ostaviti: chromatin,size,shape,nuclei,nucleoli
-	#izbaciti: adhesion,epithelial,clump,mitoses
-	"""
-	clf = SVC()
-	clf.fit(training_set_x, training_set_y) 
-	SVC(C=1.0, #C is 1 by default and it’s a reasonable default choice. If you have a lot of noisy observations you should decrease it.
-		 cache_size=200,  #Kernel cache size -> It is recommended to set cache_size to a higher value than the default of 200(MB), such as 500(MB) or 1000(MB).
-		 class_weight=None,
-		 coef0=0.0,
-			decision_function_shape=None,
-		 degree=3,
-		 gamma='auto', #The larger gamma is, the closer other examples must be to be affected.
-		 kernel='rbf', # Radial Basis Function (RBF) kernel
-			max_iter=-1,
-		 probability=False,
-		 random_state=None,
-		 shrinking=True,
-			tol=0.001,
-		 verbose=False)
+    for c in list_of_c:
+        for g in list_of_gammas: 
+            clf = svm.SVC(C = c, gamma = g, kernel='rbf', max_iter=-1).fit(training_set_x, training_set_y) 
+            predicted = clf.predict(test_set)
+            tuple_predict = (c, g, predicted)
+            prediction_validations.append(tuple_predict)
 
-	predicted = clf.predict(test_set)
-	"""
-	C = 1.0  # SVM regularization parameter
-	#clf = SVC(kernel='linear', C=C)
-	#clf = SVC(kernel='rbf', gamma=0.7, C=C)
-	#clf = SVC(kernel='poly', degree=3, C=C)
-	clf = svm.LinearSVC(C=C)
 
-	clf.fit(training_set_x, training_set_y) 
-	predicted = clf.predict(test_set)
-	"""
-	f1_score = f1_score(actual_values, predicted, average='micro')
-	print('F1 micro score: {0} %').format(f1_score)
+    all_scores_dict = {}
+    max_f1_score = 0
+    for p in prediction_validations:
+        f1_score_res = f1_score(actual_values, p[2], average='micro')
+#        print('c: {0}, gamma : {1}').format(p[0], p[1])
+#        print('F1 micro score: {0} %').format(f1_score_res)
+#        print
+        if f1_score_res in all_scores_dict:
+            all_scores_dict[f1_score_res].append((p[0], p[1]))
+        else:
+            all_scores_dict.update({f1_score_res:[(p[0], p[1])]})
+            
+    
+    
+    max_key = max(float(k) for k in all_scores_dict)
+    for s in all_scores_dict[max_key]:
+        print('BEST c: {0}, gamma : {1}, score : {2} %').format(s[0], s[1], max_key)
+    
+        
+#    clf = svm.SVC(C = c, gamma = g, kernel='rbf', max_iter=-1).fit(training_set_x, training_set_y) 
+#    predicted = clf.predict(test_set)
+#    f1_score_res = f1_score(actual_values, predicted, average='micro')
+#    print f1_score_res
+    
