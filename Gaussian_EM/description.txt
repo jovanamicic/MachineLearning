@@ -1,0 +1,58 @@
+
+Tim KMJ:
+Mina Medić SW25/2013
+Katarina Preradov SW31/2013
+Jovana Mićić SW33/2013
+
+Zadatak 5
+
+Prilikom izrade domaćeg zadataka korišćen je Python verzije 3.5.2. Od dodatnih biblioteka
+korišćene su sklearn.metrics za računanje accuracy_score, pandas za učitavanje CSV datoteke, numpy za rad sa slikama, matplotlib za
+vizuelizaciju slika i crtanje histograma i glob za ucitavanje slika iz fajl sistema.
+
+Slike su ucitane u numpy niz radi lakse manipulacije sa slikom. Podaci su trodimenzionalni - svaka dimenzija je R, G ili B komponenta slike.
+Za svaku dimenziju smo racunale mean, standrardnu devijaciju i varijansu. Prilikom izrade zadataka smo implementirale dva algoritma -
+K-means i zatim GMM sa EM metodom. K-means smo prvo implementirale zato sto je EM jako osetljiv na pocetna resenja.
+
+1) K-means
+Ovaj algoritam smo iskoristile za inicijalizaciju EM metode. Posto K-means uzima na slucajan tacke i na osnovu njih formira klastere,
+izbog pocetnih tacaka odredjue u kom redosledu ce nam formirati klastere. Ovaj problem smo resile tako sto smo iz podataka koji su nam dati
+izabrale 4 slike koje su reprezentativne za svaki klaster. Svakoj od slika smo dodelile odgovarajuci klaster, prva slika je imala klaster 0
+itd. 0 - cloudy sky; 1 - rivers; 2 - sunsets; 3 - trees and forests. 
+Ovo smo uradile na ovaj nacin zato sto smo kod ucitavanja test.csv fajla mapirali nazive klastera na odgovarajuce indekse.
+K-means nam je izracunao pocetna resenje i pocete klastere, kao i inicijalne vrednosti za mean i std za svaku dimenziju, koje su nam potrebne
+za inicijalizaciju gausovih raspodela.
+Imamo dva uslova za kraj algoritma: ili je konvergirao (centri klastera se nisu pomerili) ili je dostigao maksimalan broj iteracija
+
+2) EM
+Inicijalne vrednosti parametara nam je dao K-means. Zatim smo algoritam implementirale prateci materijale sa predavanja. U E-koraku
+smo racunale verovatnocu da instanca pripada svakom od klastera. Za svaku instancu test skupa smo racunale verovatnocu da pripada svakom
+od klastera i zatim birale najvecu verovatnocu, i tom klasteru smo dodeli tu instancu. Ove verovatnoce smo pamtile zbog azuriranja
+verovatnoci da instanca pripada svakom od klastera. Ovo se racuna za svaku instancu skupa. Zatim, kada se izracunaju novi klasteri,
+potrebno je azurirati mean i std za svaku dimenziju. 
+Imamo dva uslova za kraj algoritma: ili je konvergirao (centri klastera se nisu pomerili) ili je dostigao maksimalan broj iteracija
+
+Medjutim, velicina klastera jako zavisi od pocetnih resenja koje su birane za K-means algoritam. Tu smo isprobavale različite kombinacije
+slika. One su smestene u train folder. Ovo smo uradile samo iz razloga zato sto smo kasnije trebali da racunamo accuracy_score na osnovuu
+imena slike i naziva klastera. Algoritam (K-means) je pravio iste klastere sa (skoro) istim dimenzijama i (skoro) istim centrima.
+Takodje, odabir pocetnog resenja za K-means je kasnije uticao i na broj iteracija koje su potrebne do konvergenicije. U programu je podeseno
+da je max broj iteracija 100, i u toliko iteracija smo dobijale resenje za neke pocetne tacke. Za pocetna resenja koja smo ostavile,
+EM metoda konergira u 34 iteracije.
+
+Tacku smo predstavljale uz pomoc strukture - named_tuple zato sto smo za svaku sliku pamtile njene vrednosti piksele, mean, std, kao i
+njen naziv i indeks u dataset-u. Na ovaj nacin nam je bilo lakse da racunamo accuracy_score za svaku sliku i da je prikazujemo.
+
+Osim srednjih vrednosti R, G, B smo probale da prvo sve slike postavimo na istu velicinu i onda da racunamo broj piksela koji su
+crveni, zeleni ili plavi. Medjutim, nismo dobili dobre rezultate sa ovim nacinom, pa smo ostavile mean vrednosti za svaku dimenziju.
+
+
+Rezultati:
+- Na test skupu koji nam je dat dobijamo accuracy_score 75.0. Tacni klasteri su 0, 1, 2, i 3, a mi smo dobili 0, 1, 2, 1. 
+  Klaster 1 i 3 koje je pobrkao su reke(1) i sume(2). U skupu postoji dosta primera gde su reke i sume na istoj slici, sto je tesko i
+  ljudima da na nekim slikaja da prepoznaju sta se tu zapravo i nalazi. 
+
+- Napravile smo rucno test skupu koji sadrzi malo vise podataka, tacnije 15. Na njemu smo imali accuracy_score 50.0.
+	[0, 1, 2, 3, 0, 0, 2, 3, 2, 1, 2, 3, 0, 0] - tacne vrednosti
+	[0, 1, 2, 1, 0, 0, 1, 1, 1, 1, 1, 1, 3, 0] - predvidjanja
+
+* u data folderu se nalaze samo test.csv i test2.csv
